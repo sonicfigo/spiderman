@@ -48,10 +48,8 @@ Spider: cb_realtime
 
     FEED_URI = 'file:./crawl_data/%(name)s/item%(time)s.json' （结果中中文字符为unicode编码）
 
-Pipelines
+日志目录
 =========
-
-This project uses a pipeline to filter out websites containing certain
-forbidden words in their description. This pipeline is defined in the class::
-
-    dirbot.pipelines.FilterWordsPipeline
+	s3files/s3.log 日志文件
+	
+	s3files/s3log.config 日志配置文件
