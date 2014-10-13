@@ -46,6 +46,10 @@ Spider: cb_realtime
 	
 	python main.py crawl cb_realtime -a SAVE_HTMLFILE=1
 
+抓取结果
+=========
+在目录crawl_data/cb_realtime 查看
+
 Pipelines
 =========
 
