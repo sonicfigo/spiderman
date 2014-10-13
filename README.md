@@ -46,7 +46,7 @@ Spider: cb_realtime
 
 此目录配置于 settings.py的
 
-    FEED_URI = 'file:./crawl_data/%(name)s/item%(time)s.json'
+    FEED_URI = 'file:./crawl_data/%(name)s/item%(time)s.json' （结果中中文字符为unicode编码）
 
 Pipelines
 =========
