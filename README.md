@@ -25,7 +25,8 @@ Spider: cb_realtime
 ``cb_realtime`` spider 抓取www.CnBeta.com 的 '实时更新' 栏目.
 
 运行该蜘蛛使用以下命令
-python main.py crawl cb_realtime
+
+    python main.py crawl cb_realtime
 
 Pipelines
 =========
