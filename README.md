@@ -11,7 +11,7 @@ Python 版本2.7.6
 Pip https://pypi.python.org/pypi/pip
 
 Python包 Scrapy(使用pip安装):
-
+	
 	pip install scrapy
 
 
@@ -39,10 +39,10 @@ Spider: cb_realtime
 ``cb_realtime`` spider 抓取www.CnBeta.com 的 '实时更新' 栏目.
 
 运行蜘蛛使用以下命令
-python main.py crawl cb_realtime
+	python main.py crawl cb_realtime
 
 如果需要保存页面用于查看
-python main.py crawl cb_realtime -a SAVE_HTMLFILE=1
+	python main.py crawl cb_realtime -a SAVE_HTMLFILE=1
 
 Pipelines
 =========
