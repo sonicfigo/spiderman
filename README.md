@@ -1,18 +1,55 @@
+======
 spiderman
+======
+
+这是一个python项目，用于抓取web页面。
+
+安装
+======
+Python 版本2.7.6
+
+Pip https://pypi.python.org/pypi/pip
+
+Python包 ``Scrapy`` (使用pip安装):
+	
+	pip install scrapy
+
+Spiders
+=======
+目前该项目包含一个spider ``cb_realtime``，可以通过以下命令查看所有的spider
+
+    scrapy list
+
+Spider: cb_realtime
+------------
+``cb_realtime`` spider 抓取www.CnBeta.com 的 '实时更新' 栏目.
+
+运行蜘蛛使用以下命令
+	
+	python main.py crawl cb_realtime
+
+如果需要保存页面用于查看
+	
+	python main.py crawl cb_realtime -a SAVE_HTMLFILE=foo.html
+
+抓取结果Items
+=====
+
+抓取的结果在以下类进行定义。
+
+    core.items.RealTimeMainItem
+    core.items.RealTimeDetailItem
+    
+抓取结果目录
 =========
-> 
-Holy spiderman.
-> 
-Recommended IDE : https://wingware.com/
-> 
-Files:<br>
-main.py 启动文件<br>
-scrapy.cfg scrapy项目配置<br>
-*.wpr *.wpu IDE项目文件<br>
-> 
-Dirs:<br>
-cmd:部署scrapyd，调用spider的批处理（for windows）<br>
-core:核心的爬取和解析页面<br>
-crawl_data:抓取的json对象和html页面<br>
-deploy_dir:部署scrapyd测试服务<br>
-infrastructure:底层工具类<br>
+在目录crawl_data/cb_realtime 查看
+
+此目录配置于 settings.py的
+
+    FEED_URI = 'file:./crawl_data/%(name)s/item%(time)s.json' （结果中中文字符为unicode编码）
+
+日志目录
+=========
+	s3files/s3.log 日志文件
+	
+	s3files/s3log.config 日志配置文件
