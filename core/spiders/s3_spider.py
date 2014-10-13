@@ -22,7 +22,7 @@ import infrastructure.s3_util as s3_util
 
 class S3Spider(Spider):
     #类成员用大写， name是特例，scrapy已定义
-    name = 'Cannot call name from S3Spider.'
+    name = 's3_spider(Base spider,custom spider should inherit from this class)'
 
     def _init_task(self, kwargs):
         '''
@@ -37,12 +37,9 @@ class S3Spider(Spider):
 
     def save_htmlfile_if_assigned(self, content, name):
 
-        if self.pass_args.has_key("SAVE_HTMLFILE") and \
-           self.pass_args["SAVE_HTMLFILE"] == "1":
-            file_path = 'crawl_data/%s/%-s.html' % (
-                self.name,
-                "1"
-                )
+        if self.pass_args.has_key("SAVE_HTMLFILE"):
+            file_name = self.pass_args["SAVE_HTMLFILE"]
+            file_path = 'crawl_data/%s/%s.html' % (self.name, file_name)
             try:
                 file1 = open(file_path, 'a')
                 file1.write(content)

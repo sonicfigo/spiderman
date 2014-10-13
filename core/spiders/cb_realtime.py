@@ -1,19 +1,25 @@
 #coding=utf-8
+'''
+抓取 CnBeta '实时更新'栏目的12个li.
+
+Dom sample:
+<li data-sid="336087">
+    <div class="title">
+        <a href="/articles/336087.htm" target="_blank">爱沙尼亚：欧盟五千亿欧元数字市场的模型</a>
+    </div>
+</li>
+'''
 from datetime import datetime as dt_cls
 
 from scrapy.selector import Selector
 from scrapy.http import Request, FormRequest
 
 from s3_spider import S3Spider
-
-#from sss.items.sbp_item import SBPItem, DockItem
-from core.items.realtime_main_item import RealTimeMainItem
-
-#_TIME_FORMAT = '%d-%b-%Y %H:%M'
+from core.items import RealTimeMainItem
 
 class CnBetaRealtime(S3Spider):
     name = 'cb_realtime'
-    _pre_get_url = "http://www.cnbeta.com/"
+    _pre_get_url = "http://www.cnbeta.com/"  #打开首页，获取Realtime列表
 
     def __init__(self, **kwargs):
         self._init_task(kwargs)
@@ -24,75 +30,30 @@ class CnBetaRealtime(S3Spider):
         return result_list
 
     def _real_get(self, response):
-        self.save_htmlfile_if_assigned(str(response.body), "cb_realtime")
         hxs = Selector(response)
+        realtime_li_list_xpath = "//div[@class='realtime_list']/ul/li"
+        realtime_li_list = hxs.xpath(realtime_li_list_xpath)
+        # realtime_li_list type: <class 'scrapy.selector.unified.SelectorList'>
+        # realtime_li      type: <class 'scrapy.selector.unified.Selector'>
         
-        list_xpath = "//div[@class='realtime_list']/ul/li"
-        realtime_list = hxs.xpath(list_xpath)
-        for realtime_main in realtime_list:
-            self.insp_response(response)
-            url_info = realtime_main.xpath("/div[@class='title']/a")
-            print url_info
-        
-    #def _prepare_arguments(self):
-        #start_date = dt_cls.strptime(self.pass_args['SDATE'], SDATE_FORMAT)
-        #self.pass_args['P0'] = start_date.strftime('%d').lstrip('0')
-        #self.pass_args['P1'] = start_date.strftime('%m').lstrip('0')
-        #self.pass_args['P2'] = start_date.strftime('%Y').lstrip('0')
+        #调用参数加入 SAVE_HTMLFILE=1 ， 用于保存临时页面用于查看
+        self.save_htmlfile_if_assigned(str(response.body), "cb_realtime") 
+        for realtime_li in realtime_li_list:
+            
+            sid_ulist = realtime_li.xpath("@data-sid").extract()  #sid unicode list
+            sid_unicode= sid_ulist[0]
+            sid = str(sid_unicode)
+            
+            item_main = RealTimeMainItem()
+            item_main['Sid'] = sid
+            
+            link_tuple = self._get_link(realtime_li)
+            item_main['Href'] = link_tuple[0]
+            item_main['Title'] = link_tuple[1]
+            yield item_main
 
-    ## class 为 schedulesFirstItemHeader 的父节点table才是结果所在table
-    #def parse(self, response):
-        #self.save_htmlfile_if_assigned(str(response.body), "msk")
-        #hxs = Selector(response)
-        #xpath_tables = "//table[@class='lstBox' and .//td[@class='schedulesFirstItemHeader']]"
-        #schedule_tables = hxs.xpath(xpath_tables)
-
-        #for tb in schedule_tables:  #一个tab，一个SBPItem，N个DockItem
-            #docks = []
-            #data_rows = tb.xpath(".//tr[contains(@class, 'Row')]")
-            #for row in data_rows:
-                #datas = row.xpath("./td")
-                #dock1 = DockItem()
-
-                #location_list = datas[1].xpath("./text()").extract()
-                #if len(location_list) > 0:
-                    #dock1['Location'] = clear_text(location_list[0])
-
-                #vesselname_list = datas[4].xpath("./text()").extract()
-                #if len(vesselname_list) > 0:
-                    #dock1['VesselName'] = clear_text(vesselname_list[0])
-
-                #eta_list = datas[2].xpath("./text()").extract()
-                #if len(eta_list) > 0:
-                    #dock1['Arrival'] = _msk_parse_time(eta_list[0])
-                    ##eta_list[0]为&nbsp;(空格被html_encode 编码后)
-                    ##u"Â "(空格的unicode，在watch窗口以外的地方，显示 \xa0)
-                    ##\xc2\xa0(encode('utf-8'))
-
-                #etd_list = datas[3].xpath("./text()").extract()
-                #if len(etd_list) > 0:
-                    #dock1['Departure'] = _msk_parse_time(etd_list[0])
-
-                #voyageno_list = datas[5].xpath("./text()").extract()
-                #if len(voyageno_list) > 0:
-                    #dock1['VoyageNo'] = clear_text(voyageno_list[0])
-
-                #docks.append(dock1)
-
-            #xpath_transmit_time = ".//td[@class='schedulesFirstItemHeader']/text()"
-            #transmit_time = clear_text(tb.xpath(xpath_transmit_time)[0].extract())
-            #sbp1 = SBPItem()
-            #sbp1['Carrier'] = self.SHIP_OWNER
-            #sbp1['TransmitTime'] = pickup_number(transmit_time)
-            #sbp1['PortOfLoading'] = docks[0]['Location']
-            #sbp1['ETD'] = docks[0]['Departure']
-            #sbp1['PortOfDischarge'] = docks[len(docks) - 1]['Location']
-            #sbp1['ETA'] = docks[len(docks) - 1]['Arrival']
-            #sbp1['Docks'] = docks
-            #yield sbp1
-
-#def _msk_parse_time(time_unicode):
-    #if time_unicode == u"\xa0":  #首班没有arrival time， 末班没有departure time
-        #return None
-    #time_str_clean = clear_text(time_unicode)
-    #return parse_time(time_str_clean, _TIME_FORMAT)
+    def _get_link(self, realtime_li):
+        title_link = realtime_li.xpath("./div[@class='title']/a")[0]
+        href_unicode = title_link.xpath("@href").extract()[0]
+        title_unicode = title_link.xpath("./text()").extract()[0]
+        return(str(href_unicode), str(title_unicode))

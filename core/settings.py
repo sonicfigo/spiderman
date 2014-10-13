@@ -25,5 +25,5 @@ DOWNLOAD_DELAY = 2 #马斯基若不限制，会有部分request失败
 FEED_FORMAT = 'json'  #可用默认，若用自定义，在FEED_EXPORTERS取名字
 
 #3.wingide测试时存储位置   Storages: file,s3,ftp,stdout，有scrapyd的item，就不用此配置
-FEED_URI = 'file:./core/crawl_data/%(name)s/item%(time)s.json'
+FEED_URI = 'file:./crawl_data/%(name)s/item%(time)s.json'
 
