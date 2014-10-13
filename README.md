@@ -44,7 +44,7 @@ Spider: cb_realtime
 =========
 在目录crawl_data/cb_realtime 查看
 
-配置于 settings.py的
+此目录配置于 settings.py的
 
     FEED_URI = 'file:./crawl_data/%(name)s/item%(time)s.json'
 
