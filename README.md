@@ -15,12 +15,11 @@ Python包 Scrapy(使用pip安装):
 	pip install scrapy
 
 
-Items
+抓取结果Items
 =====
 
 The items scraped by this project are websites, and the item is defined in the
 抓取的结果在以下类进行定义。
-class::
 
     core.items.RealTimeMainItem
     core.items.RealTimeDetailItem
@@ -46,7 +45,7 @@ Spider: cb_realtime
 	
 	python main.py crawl cb_realtime -a SAVE_HTMLFILE=1
 
-抓取结果
+抓取目录
 =========
 在目录crawl_data/cb_realtime 查看
 
