@@ -14,18 +14,6 @@ Python包 Scrapy(使用pip安装):
 	
 	pip install scrapy
 
-
-抓取结果Items
-=====
-
-The items scraped by this project are websites, and the item is defined in the
-抓取的结果在以下类进行定义。
-
-    core.items.RealTimeMainItem
-    core.items.RealTimeDetailItem
-
-See the source code for more details.
-
 Spiders
 =======
 目前该项目包含一个spider ``cb_realtime``，可以通过以下命令查看所有的spider
@@ -45,9 +33,21 @@ Spider: cb_realtime
 	
 	python main.py crawl cb_realtime -a SAVE_HTMLFILE=1
 
-抓取目录
+抓取结果Items
+=====
+
+The items scraped by this project are websites, and the item is defined in the
+抓取的结果在以下类进行定义。
+
+    core.items.RealTimeMainItem
+    core.items.RealTimeDetailItem
+    
+抓取结果目录
 =========
 在目录crawl_data/cb_realtime 查看
+配置于 settings.py的
+
+    FEED_URI = 'file:./crawl_data/%(name)s/item%(time)s.json'
 
 Pipelines
 =========
