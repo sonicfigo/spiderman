@@ -10,14 +10,13 @@ Python 版本2.7.6
 
 Pip https://pypi.python.org/pypi/pip
 
-Python包 Scrapy(使用pip安装):
+Python包 ``Scrapy`` (使用pip安装):
 	
 	pip install scrapy
 
 Spiders
 =======
 目前该项目包含一个spider ``cb_realtime``，可以通过以下命令查看所有的spider
-Fow now,this project contains one spider called ``cb_realtime`` that you can see by running::
 
     scrapy list
 
@@ -36,7 +35,6 @@ Spider: cb_realtime
 抓取结果Items
 =====
 
-The items scraped by this project are websites, and the item is defined in the
 抓取的结果在以下类进行定义。
 
     core.items.RealTimeMainItem
