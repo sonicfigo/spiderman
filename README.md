@@ -30,7 +30,7 @@ Spider: cb_realtime
 
 如果需要保存页面用于查看
 	
-	python main.py crawl cb_realtime -a SAVE_HTMLFILE=1
+	python main.py crawl cb_realtime -a SAVE_HTMLFILE=foo.html
 
 抓取结果Items
 =====
