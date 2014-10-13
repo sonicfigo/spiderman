@@ -2,12 +2,12 @@
 spiderman
 ======
 
-This is a python project to scrape websites from public web directories such as http://www.cnbeta.com
 这是一个python项目，用于抓取web页面。
 
 安装
 ======
 Python 版本2.7.6
+
 Pip https://pypi.python.org/pypi/pip
 
 Python包 Scrapy(使用pip安装):
@@ -45,6 +45,7 @@ The items scraped by this project are websites, and the item is defined in the
 抓取结果目录
 =========
 在目录crawl_data/cb_realtime 查看
+
 配置于 settings.py的
 
     FEED_URI = 'file:./crawl_data/%(name)s/item%(time)s.json'
